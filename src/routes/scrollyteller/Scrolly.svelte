@@ -1,0 +1,93 @@
+<script>
+	/**
+	Scrollytelling component from Russell Goldenberg 
+	https://twitter.com/codenberg/status/1432774653139984387
+	
+   **/
+
+	import { onMount } from 'svelte'
+	// @ts-ignore
+	export let root = null
+	export let top = 0
+	export let bottom = 0
+	export let increments = 100
+	export let value = 0
+
+	// @ts-ignore
+	const steps = []
+	// @ts-ignore
+	const threshold = []
+
+	// @ts-ignore
+	export let nodes = []
+	// @ts-ignore
+	export let intersectionObservers = []
+	// @ts-ignore
+	export let container
+
+	// @ts-ignore
+	// @ts-ignore
+	$: top, bottom, update()
+
+	const update = () => {
+		if (!nodes.length) return
+		// @ts-ignore
+		nodes.forEach(createObserver)
+	}
+
+	const mostInView = () => {
+		let maxRatio = 0
+		let maxIndex = 0
+		for (let i = 0; i < steps.length; i++) {
+			// @ts-ignore
+			if (steps[i] > maxRatio) {
+				// @ts-ignore
+				maxRatio = steps[i]
+				maxIndex = i
+			}
+		}
+
+		if (maxRatio > 0) value = maxIndex
+		else value = 0
+	}
+
+	// @ts-ignore
+	const createObserver = (node, index) => {
+		// @ts-ignore
+		const handleIntersect = (e) => {
+			// @ts-ignore
+			// @ts-ignore
+			const intersecting = e[0].isIntersecting
+			const ratio = e[0].intersectionRatio
+			steps[index] = ratio
+			mostInView()
+		}
+
+		const marginTop = top ? top * -1 : 0
+		const marginBottom = bottom ? bottom * -1 : 0
+		const rootMargin = `${marginTop}px 0px ${marginBottom}px 0px`
+		const options = { root, rootMargin, threshold }
+
+		// @ts-ignore
+		if (intersectionObservers[index])
+			// @ts-ignore
+			intersectionObservers[index].disconnect()
+
+		const io = new IntersectionObserver(handleIntersect, options)
+		io.observe(node)
+		intersectionObservers[index] = io
+	}
+
+	onMount(() => {
+		for (let i = 0; i < increments + 1; i++) {
+			threshold.push(i / increments)
+		}
+		// @ts-ignore
+		nodes = container.querySelectorAll(':scope > *')
+		update()
+	})
+</script>
+
+<div bind:this={container}>
+	<slot />
+</div>
