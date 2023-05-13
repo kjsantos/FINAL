@@ -2,6 +2,10 @@
 	import { text } from 'svelte/internal'
 	import '/src/app.css'
 	import { page } from '$app/stores'
+	/** @type {import('@sveltejs/adapter-vercel').Config} */
+	export const config = {
+		runtime: 'nodejs18.x',
+	}
 </script>
 
 <svelte:head>
