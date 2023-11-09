@@ -24,7 +24,7 @@
 				<div
 					class="flex-column p-5 text-right text-3xl"
 					in:fly={{ y: 80, duration: 1500, delay: 250 }}
-					out:fade={{ duration: 100 }}>
+					out:fade={{ duration: 50 }}>
 					{@html content}
 				</div>
 			</div>

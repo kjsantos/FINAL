@@ -1,12 +1,10 @@
 <script>
 	import { scaleBand, scaleLinear } from 'd3-scale'
-	import Layout from '../+layout.svelte'
 	import { init_binding_group } from 'svelte/internal'
+	export let data
 
 	const width = 1000
 	const height = 824
-
-	export let data = []
 
 	const margin = { top: 10, right: 30, bottom: 100, left: 120 }
 	const innerHeight = height - margin.top - margin.bottom
